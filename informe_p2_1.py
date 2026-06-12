@@ -28,22 +28,26 @@ df['CountryBinario'] = (df['Country'] == 'United Kingdom').astype(int)
 # df['Salida'] = (df['Quantity'] > 25).astype(int)
 
 #NUEVO QUE AGREGO
+
+# FRECUENCIA
 # frecuencia = df.groupby('CustomerID')['InvoiceNo'].nunique()
 # df['Frecuencia'] = df['CustomerID'].map(frecuencia).fillna(1)
-df['TotalPrice'] = df['Quantity'] * df['UnitPrice']
 # df['Salida'] = ((df['Quantity'] > 25) & (df['Frecuencia'] > 1)).astype(int)
-df['Salida'] = ((df['Quantity'] > 20) & (df['TotalPrice'] > 30)).astype(int)
+
+# VALOR TOTAL
+df['Valor total'] = df['Quantity'] * df['UnitPrice']
+df['Salida'] = ((df['Quantity'] > 20) & (df['Valor total'] > 30)).astype(int)
 
 # Normalización Z-score
 # for col in ['Quantity', 'UnitPrice']:
 # for col in ['Quantity', 'UnitPrice', 'Frecuencia']:
-for col in ['Quantity', 'UnitPrice', 'TotalPrice']:
+for col in ['Quantity', 'UnitPrice', 'Valor total']:
     media = df[col].mean()
     desvio = df[col].std()
     df[col] = (df[col] - media) / desvio
 
 # Definir salida
-X = df[['Quantity', 'UnitPrice', 'CountryBinario', 'TotalPrice']].values
+X = df[['Quantity', 'UnitPrice', 'CountryBinario', 'Valor total']].values
 Y = df['Salida'].values
 
 # Dividir en entrenamiento y test

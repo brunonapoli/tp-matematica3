@@ -18,36 +18,39 @@ df['United Kingdom'] = (df['Country'] == 'United Kingdom').astype(int)
 frecuencia = df.groupby('CustomerID')['InvoiceNo'].nunique()
 df['Frecuencia'] = df['CustomerID'].map(frecuencia).fillna(1)
 
-# print(df['Frecuencia'].describe())
-# print()
-# print(df['Frecuencia'].quantile([0.5, 0.75, 0.9, 0.95]))
-
-
 
 caracteristicas = ['Quantity', 'UnitPrice', 'Valor total', 'United Kingdom', 'Mayorista']
 carac_correlacion = df[caracteristicas].corr()
 # print(carac_correlacion['Mayorista'].sort_values(ascending = False))
 
+# MI TABLA
 # print(df['Quantity'].max()) #veo el valor máximo, acá me tira 2880
 # print(df['Quantity'].sort_values(ascending=False).head(10)) #veo los 10 valores mas altos
 # print(df['Quantity'].mean())   # promedio
 # print(df['Quantity'].median()) # mediana
 
 
+# FRECUENCIA
 # mayoristas = ((df['Quantity'] > 25) & (df['Frecuencia'] > 3)).sum()
 # print(f'Mayoristas: {mayoristas}')
 # print(f'Minoristas: {len(df) - mayoristas}')
 # print(f'Porcentaje mayoristas: {mayoristas/len(df)*100:.1f}%')
 
+# VALOR TOTAL
+# for i in [50, 30, 20, 10]:
+#     mayoristas = ((df['Quantity'] > 20) & (df['Valor total'] > i)).sum()
+#     print(f'Valor total {i}: {mayoristas} mayoristas ({mayoristas/len(df)*100:.1f}%)')
 
-# df['TotalPrice'] = df['Quantity'] * df['UnitPrice']
-# mayoristas = ((df['Quantity'] > 20) & (df['TotalPrice'] > 30)).sum()
 
-# print(f'Mayoristas: {mayoristas}')
-# print(f'Porcentaje: {mayoristas/len(df)*100:.1f}%')
+
+df['TotalPrice'] = df['Quantity'] * df['UnitPrice']
+mayoristas = ((df['Quantity'] > 20) & (df['TotalPrice'] > 30)).sum()
+
+print(f'Mayoristas: {mayoristas}')
+print(f'Porcentaje: {mayoristas/len(df)*100:.1f}%')
 
 # Para calcular la normalización:
-for columna in ['Quantity', 'UnitPrice', 'TotalPrice']:
+for columna in ['Quantity', 'UnitPrice', 'Valor total']:
     media = df[columna].mean()
     desvio = df[columna].std()
     df[columna] = (df[columna] - media) / desvio
